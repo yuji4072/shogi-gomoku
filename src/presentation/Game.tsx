@@ -9,6 +9,10 @@ export const Game: React.FC = () => {
   const [gameState, setGameState] = useState<GameState>(createInitialGameState());
   const [selectedPieceType, setSelectedPieceType] = useState<PieceType | null>(null);
 
+  // Record<PieceType, number> → PieceType[] 変換関数
+  const handToArray = (hand: Record<PieceType, number>): PieceType[] =>
+    Object.entries(hand).flatMap(([type, count]) => Array(count).fill(type as PieceType));
+
   const handleCellClick = (position: Position) => {
     if (gameState.winner) return;
 
@@ -38,25 +42,39 @@ export const Game: React.FC = () => {
     }
   };
 
-  const handlePieceClick = (piece: Piece, position: Position) => {
+  // pieceクリック時にpositionも渡すためのラッパー
+  const handlePieceClick = (piece: Piece) => {
     if (gameState.winner) return;
     if (piece.owner !== gameState.currentPlayer) return;
-
+    // 盤面上のpieceの位置を探す
+    const found = gameState.board.flatMap((row, rowIdx) =>
+      row.map((cell, colIdx) => (cell === piece ? [rowIdx, colIdx] as Position : null))
+    ).find(pos => pos !== null);
+    if (!found) return;
     setGameState({
       ...gameState,
       mode: GameMode.Move,
-      selectedPiece: { from: position, piece },
+      selectedPiece: { from: found, piece },
     });
   };
 
   const handlePieceSelect = (type: PieceType) => {
     if (gameState.winner) return;
-    setSelectedPieceType(type);
-    setGameState({
-      ...gameState,
-      mode: GameMode.Place,
-      selectedPiece: undefined,
-    });
+    if (selectedPieceType === type) {
+      setSelectedPieceType(null);
+      setGameState({
+        ...gameState,
+        mode: GameMode.Place,
+        selectedPiece: undefined,
+      });
+    } else {
+      setSelectedPieceType(type);
+      setGameState({
+        ...gameState,
+        mode: GameMode.Place,
+        selectedPiece: undefined,
+      });
+    }
   };
 
   const handleReset = () => {
@@ -82,12 +100,14 @@ export const Game: React.FC = () => {
         </div>
       </div>
 
-      <div className="grid grid-cols-3 gap-4">
+      {/* デスクトップ表示 */}
+      <div className="hidden md:grid grid-cols-3 gap-4">
         <PlayerHand
           player={Player.Player1}
-          pieces={gameState.playerHands[Player.Player1]}
+          pieces={handToArray(gameState.playerHands[Player.Player1])}
           onPieceSelect={handlePieceSelect}
           isCurrentPlayer={gameState.currentPlayer === Player.Player1}
+          selectedPieceType={selectedPieceType}
         />
         <div className="col-span-1">
           <GameBoard
@@ -98,9 +118,28 @@ export const Game: React.FC = () => {
         </div>
         <PlayerHand
           player={Player.Player2}
-          pieces={gameState.playerHands[Player.Player2]}
+          pieces={handToArray(gameState.playerHands[Player.Player2])}
           onPieceSelect={handlePieceSelect}
           isCurrentPlayer={gameState.currentPlayer === Player.Player2}
+          selectedPieceType={selectedPieceType}
+        />
+      </div>
+
+      {/* モバイル表示 */}
+      <div className="md:hidden">
+        <div className="mb-4">
+          <GameBoard
+            gameState={gameState}
+            onCellClick={handleCellClick}
+            onPieceClick={handlePieceClick}
+          />
+        </div>
+        <PlayerHand
+          player={gameState.currentPlayer}
+          pieces={handToArray(gameState.playerHands[gameState.currentPlayer])}
+          onPieceSelect={handlePieceSelect}
+          isCurrentPlayer={true}
+          selectedPieceType={selectedPieceType}
         />
       </div>
 

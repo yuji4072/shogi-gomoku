@@ -12,7 +12,8 @@ type PieceViewProps = {
 export const PieceView: React.FC<PieceViewProps> = ({ piece, position, isSelected, onClick }) => (
   <div
     className={`
-      w-full h-full flex items-center justify-center
+      w-full h-full aspect-square flex items-center justify-center
+      p-2
       text-lg font-bold
       ${piece.owner === Player.Player1
         ? 'bg-red-500 text-white'
@@ -21,12 +22,13 @@ export const PieceView: React.FC<PieceViewProps> = ({ piece, position, isSelecte
       ${isSelected ? 'ring-2 ring-yellow-400' : ''}
       shadow-md
       ${piece.owner === Player.Player2 ? 'rotate-180' : ''}
+      cursor-pointer transition
     `}
     onClick={onClick ? (e) => {
       e.stopPropagation();
       onClick(piece, position);
     } : undefined}
   >
-    {piece.type}
+    <span className="text-lg font-bold">{piece.type}</span>
   </div>
 ); 

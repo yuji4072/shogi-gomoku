@@ -26,8 +26,9 @@ export const PlayerHand: React.FC<PlayerHandProps> = ({
   return (
     <div className={`
         p-4 rounded-lg
-      ${player === Player.Player1 ? 'bg-red-50' : 'bg-blue-50'}
+      ${player === Player.Player1 ? 'bg-red-50 dark:bg-red-900' : 'bg-blue-50 dark:bg-blue-900'}
       ${isCurrentPlayer ? 'ring-2 ring-green-500' : ''}
+      dark:text-white
     `}>
       <h2 className="text-lg font-bold mb-2">
         {player === Player.Player1 ? 'プレイヤー1' : 'プレイヤー2'}の駒
@@ -38,7 +39,7 @@ export const PlayerHand: React.FC<PlayerHandProps> = ({
             key={type}
             className={`
               flex items-center gap-2 p-2 rounded
-              ${isCurrentPlayer ? 'cursor-pointer hover:bg-white' : 'opacity-50'}
+              ${isCurrentPlayer ? 'cursor-pointer hover:bg-white dark:hover:bg-gray-700' : 'opacity-50'}
               ${selectedPieceType === type ? 'ring-2 ring-yellow-400' : ''}
             `}
             onClick={() => isCurrentPlayer && onPieceSelect(type as PieceType)}

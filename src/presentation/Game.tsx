@@ -83,7 +83,7 @@ export const Game: React.FC = () => {
   };
 
   return (
-    <div className="max-w-4xl mx-auto p-4 min-h-screen">
+    <div className="max-w-4xl mx-auto p-4 min-h-screen bg-white text-black dark:bg-gray-900 dark:text-white">
       <div className="mb-4">
         <h1 className="text-2xl font-bold mb-2">将棋五目並べ</h1>
         <div className="flex justify-between items-center">

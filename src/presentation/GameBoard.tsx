@@ -33,7 +33,7 @@ export const GameBoard: React.FC<GameBoardProps> = ({
 
   return (
     <div className="w-full max-w-[600px] mx-auto">
-      <div className="grid grid-cols-9 gap-0.5 bg-gray-200 p-0.5 rounded-lg">
+      <div className="grid grid-cols-9 gap-0.5 bg-gray-200 p-0.5 rounded-lg dark:bg-gray-800">
         {gameState.board.map((row, rowIndex) => (
           row.map((cell, colIndex) => {
             const position: Position = [rowIndex, colIndex];
@@ -49,9 +49,9 @@ export const GameBoard: React.FC<GameBoardProps> = ({
                 className={`
                   aspect-square flex items-center justify-center
                   overflow-hidden p-0
-                  ${isMovable ? 'bg-green-100' : 'bg-white'}
+                  ${isMovable ? 'bg-green-100 dark:bg-green-900' : 'bg-white dark:bg-gray-900'}
                   ${isSelected ? 'ring-2 ring-blue-500' : ''}
-                  cursor-pointer hover:bg-gray-50
+                  cursor-pointer hover:bg-gray-50 dark:hover:bg-gray-700
                 `}
                 onClick={() => handleCellClick(rowIndex, colIndex)}
               >

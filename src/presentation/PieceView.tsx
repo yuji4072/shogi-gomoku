@@ -16,8 +16,8 @@ export const PieceView: React.FC<PieceViewProps> = ({ piece, position, isSelecte
       p-2
       text-lg font-bold
       ${piece.owner === Player.Player1
-        ? 'bg-red-500 text-white'
-        : 'bg-blue-500 text-white'
+        ? 'bg-red-500 text-white dark:text-black'
+        : 'bg-blue-500 text-white dark:text-black'
       }
       ${isSelected ? 'ring-2 ring-yellow-400' : ''}
       shadow-md
